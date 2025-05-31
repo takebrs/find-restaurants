@@ -43,3 +43,26 @@ document.getElementById("searchForm").addEventListener("submit", e => {
   if (!kw) return;
   search(kw).then(render).catch(alert);
 });
+
+// wrangler.toml で名前とアカウントを設定
+export default {
+async fetch(request) {
+    const url = new URL(request.url);
+    const q = url.searchParams.get("q");
+
+    const apiUrl = `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/` +
+    `?key=${HOTPEPPER_KEY}&keyword=${encodeURIComponent(q)}&format=json&count=20`;
+
+    const res = await fetch(apiUrl);
+
+    return new Response(res.body, {
+    status: res.status,
+    headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",             // ← ここが最重要！
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "*"
+    }
+    });
+}
+}
