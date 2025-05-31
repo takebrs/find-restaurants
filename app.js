@@ -4,13 +4,15 @@ const SID      = import.meta.env?.VC_SID || "1234567";
 const PID      = import.meta.env?.VC_PID || "890123456";
 
 // --------- ② 店舗検索 ---------
-const API_GATEWAY = "https://gourmet-api.yourname.workers.dev"; // ← proxy URL
+const API_GATEWAY = "https://f-worker-proxy.okawaratakeshi0827.workers.dev";
 
 async function search(keyword) {
   const res = await fetch(`${API_GATEWAY}?q=${encodeURIComponent(keyword)}`);
   if (!res.ok) throw new Error("proxy error");
-  return (await res.json()).results.shop;
+  const data = await res.json();
+  return data.results.shop;
 }
+
 
 
 // --------- ③ VC Deeplink 生成 ---------
@@ -44,25 +46,4 @@ document.getElementById("searchForm").addEventListener("submit", e => {
   search(kw).then(render).catch(alert);
 });
 
-// wrangler.toml で名前とアカウントを設定
-export default {
-async fetch(request) {
-    const url = new URL(request.url);
-    const q = url.searchParams.get("q");
 
-    const apiUrl = `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/` +
-    `?key=${HOTPEPPER_KEY}&keyword=${encodeURIComponent(q)}&format=json&count=20`;
-
-    const res = await fetch(apiUrl);
-
-    return new Response(res.body, {
-    status: res.status,
-    headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",             // ← ここが最重要！
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Access-Control-Allow-Headers": "*"
-    }
-    });
-}
-}
