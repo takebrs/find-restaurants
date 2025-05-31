@@ -4,7 +4,7 @@ const SID      = import.meta.env?.VC_SID || "1234567";
 const PID      = import.meta.env?.VC_PID || "890123456";
 
 // --------- ② 店舗検索 ---------
-const API_GATEWAY = "https://f-worker-proxy.okawaratakeshi0827.workers.dev";
+const API_GATEWAY = "https://cf-worker-proxy.okawaratakeshi0827.workers.dev";
 
 async function search(keyword) {
   const res = await fetch(`${API_GATEWAY}?q=${encodeURIComponent(keyword)}`);
