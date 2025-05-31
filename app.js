@@ -4,14 +4,14 @@ const SID      = import.meta.env?.VC_SID || "1234567";
 const PID      = import.meta.env?.VC_PID || "890123456";
 
 // --------- ② 店舗検索 ---------
+const API_GATEWAY = "https://gourmet-api.yourname.workers.dev"; // ← proxy URL
+
 async function search(keyword) {
-  const url = `https://webservice.recruit.co.jp/hotpepper/gourmet/v1/` +
-              `?key=${API_KEY}&keyword=${encodeURIComponent(keyword)}` +
-              `&format=json&count=20`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("API Error");
-  return (await res.json()).results.shop;   // ← 店舗配列
+  const res = await fetch(`${API_GATEWAY}?q=${encodeURIComponent(keyword)}`);
+  if (!res.ok) throw new Error("proxy error");
+  return (await res.json()).results.shop;
 }
+
 
 // --------- ③ VC Deeplink 生成 ---------
 function toVcLink(shopUrl) {
