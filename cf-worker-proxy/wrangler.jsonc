@@ -6,9 +6,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "cf-worker-proxy",
 	"compatibility_date": "2025-05-31",
-	"assets": {
-		"directory": "./public"
-	},
+	"main": "index.js",
 	"observability": {
 		"enabled": true
 	}
